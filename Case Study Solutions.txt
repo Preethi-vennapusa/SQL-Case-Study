@@ -1,5 +1,3 @@
--- SOLUTIONS:
-
 1) Identify the country which has produced the most F1 drivers.
 	select nationality,count(1) from drivers group by nationality order by 2 desc limit 1;
 
