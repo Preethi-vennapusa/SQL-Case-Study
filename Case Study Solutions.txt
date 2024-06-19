@@ -1,39 +1,46 @@
 1) Identify the country which has produced the most F1 drivers.
-	select nationality,count(1) from drivers group by nationality order by 2 desc limit 1;
+select nationality,count(1) 
+from drivers 
+group by nationality 
+order by 2 desc 
+limit 1;
 
 
 2) Which country has produced the most no of F1 circuits
-	select country,count(1) from circuits group by country order by 2 desc limit 1;
+select country,count(1) 
+from circuits 
+group by country 
+order by 2 desc 
+limit 1;
 
 
 3) Which countries have produced exactly 5 constructors? 
-	select nationality,count(1) from constructors group by nationality having count(1) = 5;
+select nationality,count(1) 
+from constructors 
+group by nationality 
+having count(1) = 5;
 
 
 4) List down the no of races that have taken place each year
-	select year, count(1) 
-	from races
-	group by year
-	order by year desc;
+select year, count(1) 
+from races
+group by year
+order by year desc;
 
 
 5) Who is the youngest and oldest F1 driver?
-	select max(case when rn=1 then forename||' '||surname end) as oldest_driver
-	, max(case when rn=cnt then forename||' '||surname end) as youngest_driver
-	from (
-		select *, row_number() over (order by dob ) as rn, count(*) over() as cnt
+select max(case when rn=1 then forename||' '||surname end) as oldest_driver, max(case when rn=cnt then forename||' '||surname end) as youngest_driver
+from (select *, row_number() over (order by dob ) as rn, count(*) over() as cnt
 		from drivers) x
-	where rn = 1 or rn = cnt
+where rn = 1 or rn = cnt
 
 
 6) List down the no of races that have taken place each year and mentioned which was the first and the last race of each season.
-	select distinct year
-	,first_value(name) over(partition by year order by date) as first_race
-	, last_value(name) over(partition by year order by date 
-						   range between unbounded preceding and unbounded following) as last_race
-	, count(*) over(partition by year) as no_of_races
-	from races
-	order by year desc
+select distinct year,first_value(name) over(partition by year order by date) as first_race
+, last_value(name) over(partition by year order by date 
+range between unbounded preceding and unbounded following) as last_race, count(*) over(partition by year) as no_of_races
+from races
+order by year desc
 
 
 7) Which circuit has hosted the most no of races. Display the circuit name, no of races, city and country.
@@ -370,7 +377,7 @@
 
 
 30) Which driver has the most pole position (no 1 in qualifying)
-	*** Data is missing for some race qualifications
+	
 	select driver_name, pole_positions
 	from (select q.driverid, concat(d.forename,' ',d.surname) as driver_name
 		, count(1) as pole_positions
